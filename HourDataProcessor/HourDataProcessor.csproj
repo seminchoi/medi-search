@@ -16,6 +16,10 @@
       <Content Include="resources\init.sql">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+      <None Remove="resources\appsettings.yml" />
+      <Content Include="resources\appsettings.yml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>
