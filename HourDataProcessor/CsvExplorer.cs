@@ -1,3 +1,5 @@
+using HourDataProcessor.Entity;
+
 namespace HourDataProcessor;
 
 public interface ICsvExplorer
@@ -16,7 +18,7 @@ public class YmlCsvExplorer : ICsvExplorer
         return new CsvInfo()
         {
             Path = "/Users/choisemin/workspace/0-job-search/test/GradeHealthCare/hour-datas/hospital-1.csv",
-            CompanyType = CompanyType.Hospital
+            InstitutionType = InstitutionType.Hospital
         };
     }
 
@@ -28,15 +30,9 @@ public class YmlCsvExplorer : ICsvExplorer
     }
 }
 
-public enum CompanyType
-{
-    Hospital,
-    DrugStore
-}
-
 public struct CsvInfo
 {
     public string Path { get; init; }
-    public CompanyType CompanyType { get; init; }
+    public InstitutionType InstitutionType { get; init; }
 }
 
