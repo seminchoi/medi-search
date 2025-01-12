@@ -29,11 +29,11 @@ public class ConfigHolder
 // Todo: immutable 객체로 설정하면 더욱 좋겠지만 YamlDotNet을 간편하게 사용하기 위해 일반 클래스로 설정하였습니다.
 public class Config
 {
-    public DatabaseConfig Database { get; set; }
+    public DatabaseConfig? Database { get; set; }
 }
 
 public class DatabaseConfig
 {
-    public string InitConnectionString { get; set; }
-    public string ConnectionString { get; set; }
+    public string? InitConnectionString { get; set; }
+    public string? ConnectionString { get; set; }
 };
