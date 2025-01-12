@@ -1,3 +1,7 @@
 database:
   initConnectionString: "Server=localhost; User Id=sa;Password=rootRoot123; TrustServerCertificate=True"
   connectionString: "Server=localhost;Database=LogApp;User Id=sa;Password=rootRoot123;Pooling=true;Min Pool Size=4; Max Pool Size = 4;TrustServerCertificate=True"
+  
+csvSource:
+  basePath: "resources"
+  fileNames: ["hospitalex-1", "hospitalex-2", "hospitalex-3"]
