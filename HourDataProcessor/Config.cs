@@ -34,5 +34,6 @@ public class Config
 
 public class DatabaseConfig
 {
+    public string InitConnectionString { get; set; }
     public string ConnectionString { get; set; }
 };

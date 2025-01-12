@@ -6,7 +6,7 @@ public static class DbInitializer
 {
     public static void Initialize()
     {
-        var connectionString = ConfigHolder.AppConfig.Database.ConnectionString;
+        var connectionString = ConfigHolder.AppConfig.Database.InitConnectionString;
         var rootPath = AppContext.BaseDirectory;
         var sqlPath = Path.Combine(rootPath, "resources", "init.sql");
         
