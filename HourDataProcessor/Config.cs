@@ -30,6 +30,7 @@ public class ConfigHolder
 public class Config
 {
     public DatabaseConfig? Database { get; set; }
+    public CsvSource? CsvSource { get; set; }
 }
 
 public class DatabaseConfig
@@ -37,3 +38,9 @@ public class DatabaseConfig
     public string? InitConnectionString { get; set; }
     public string? ConnectionString { get; set; }
 };
+
+public class CsvSource
+{
+    public string BasePath { get; set; }
+    public List<string> FileNames { get; set; }
+}
