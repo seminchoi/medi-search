@@ -20,11 +20,20 @@
       <Content Update="resources\appsettings.yml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
-      <Content Update="resources\init.sql">
+      <None Remove="resources\init-database.sql" />
+      <Content Include="resources\init-database.sql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="resources\init-table.sql" />
+      <Content Include="resources\init-table.sql">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
       <None Remove="resources\appsettings.yml" />
       <Content Include="resources\appsettings.yml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="resources\destroy-database.sql" />
+      <Content Include="resources\destroy-database.sql">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
     </ItemGroup>

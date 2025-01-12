@@ -6,9 +6,14 @@ public static class DbInitializer
 {
     public static void Initialize()
     {
-        var connectionString = ConfigHolder.AppConfig.Database.InitConnectionString;
+        ExecuteQueryUsingFile(ConfigHolder.AppConfig.Database.InitConnectionString, "init-database.sql");
+        ExecuteQueryUsingFile(ConfigHolder.AppConfig.Database.ConnectionString, "init-table.sql");
+    }
+
+    public static void ExecuteQueryUsingFile(string connectionString, string fileName)
+    {
         var rootPath = AppContext.BaseDirectory;
-        var sqlPath = Path.Combine(rootPath, "resources", "init.sql");
+        var sqlPath = Path.Combine(rootPath, "resources", fileName);
         
         if (!File.Exists(sqlPath))
         {
