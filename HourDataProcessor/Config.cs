@@ -26,21 +26,21 @@ public class ConfigHolder
 }
 
 // 설정 변수를 가지는 클래스 입니다.
-// Todo: immutable 객체로 설정하면 더욱 좋겠지만 YamlDotNet을 간편하게 사용하기 위해 일반 클래스로 설정하였습니다.
+// TODO: immutable 객체로 설정하면 더욱 좋겠지만 YamlDotNet을 간편하게 사용하기 위해 일반 클래스로 설정하였습니다.
 public class Config
 {
-    public DatabaseConfig? Database { get; set; }
-    public CsvSource? CsvSource { get; set; }
+    public DatabaseConfig Database { get; set; }
+    public CsvSource CsvSource { get; set; }
 }
 
 public class DatabaseConfig
 {
-    public string? InitConnectionString { get; set; }
-    public string? ConnectionString { get; set; }
+    public string InitConnectionString { get; set; }
+    public string ConnectionString { get; set; }
 };
 
 public class CsvSource
 {
-    public string BasePath { get; set; }
+    public string? BasePath { get; set; }
     public List<string> FileNames { get; set; }
 }
