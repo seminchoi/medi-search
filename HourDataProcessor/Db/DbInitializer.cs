@@ -6,14 +6,19 @@ public static class DbInitializer
 {
     public static void Initialize()
     {
-        ExecuteQueryUsingFile(ConfigHolder.AppConfig.Database.InitConnectionString, "init-database.sql");
-        ExecuteQueryUsingFile(ConfigHolder.AppConfig.Database.ConnectionString, "init-table.sql");
+        var dbConfig = ConfigHolder.AppConfig.Database;
+        if (dbConfig.DevMode)
+        {
+            ExecuteQueryUsingFile(dbConfig.MasterConnectionString, "destroy-database.sql");
+        }
+        ExecuteQueryUsingFile(dbConfig.MasterConnectionString, "init-database.sql");
+        ExecuteQueryUsingFile(dbConfig.ConnectionString, "init-table.sql");
     }
 
-    public static void ExecuteQueryUsingFile(string connectionString, string fileName)
+    public static void ExecuteQueryUsingFile(string connectionString, string filePath)
     {
         var rootPath = AppContext.BaseDirectory;
-        var sqlPath = Path.Combine(rootPath, "resources", fileName);
+        var sqlPath = Path.Combine(rootPath, "resources", filePath);
         
         if (!File.Exists(sqlPath))
         {

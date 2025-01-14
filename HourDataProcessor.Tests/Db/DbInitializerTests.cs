@@ -18,6 +18,6 @@ public class DbInitializerTests
     [TearDown]
     public void TearDown()
     {
-        DbInitializer.ExecuteQueryUsingFile(ConfigHolder.AppConfig.Database.InitConnectionString, "destroy-database.sql");
+        DbInitializer.ExecuteQueryUsingFile(ConfigHolder.AppConfig.Database.MasterConnectionString, "destroy-database.sql");
     }
 }

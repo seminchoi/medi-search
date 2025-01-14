@@ -35,7 +35,8 @@ public class Config
 
 public class DatabaseConfig
 {
-    public string InitConnectionString { get; set; }
+    public bool DevMode { get; set; }
+    public string MasterConnectionString { get; set; }
     public string ConnectionString { get; set; }
 };
 
