@@ -15,15 +15,6 @@
       <Content Include="resources\appsettings.yml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
-      <Content Include="resources\hospital-1.csv">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <Content Include="resources\hospital-2.csv">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <Content Include="resources\hospital-3.csv">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
       <Content Include="resources\destroy-database.sql">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
@@ -49,6 +40,25 @@
 
     <ItemGroup>
       <Folder Include="logs\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="resources\csvs\hospital2.csv" />
+      <Content Include="resources\csvs\hospital2.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="resources\csvs\hospital1.csv" />
+      <Content Include="resources\csvs\hospital1.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="resources\csvs\drugstore1.csv" />
+      <Content Include="resources\csvs\drugstore1.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="resources\csvs\details1.csv" />
+      <Content Include="resources\csvs\details1.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>
