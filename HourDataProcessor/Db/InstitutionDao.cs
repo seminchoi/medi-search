@@ -19,7 +19,7 @@ public class InstitutionDao
         AddParameters(command, institution);
 
         using var reader = command.ExecuteReader();
-        var result = ReadInstitution(institution, reader);
+        var result = CreateInstitutionFromReader(reader);
 
         return result;
     }
@@ -45,7 +45,7 @@ public class InstitutionDao
         ";
 
         var selectQuery = $@"
-        SELECT DISTINCT 
+        SELECT 
             Institution.Id AS Id,
             Code,
             Name, 
@@ -79,16 +79,7 @@ public class InstitutionDao
         command.Parameters.AddWithValue("@Longitude", institution.Longitude ?? (object)DBNull.Value);
     }
 
-    private List<Institution> ReadInstitution(Institution newInstitution, SqlDataReader reader)
-    {
-        if (!reader.Read())
-            return new List<Institution>();
-        
-        var institutions = CreateInstitutionFromReader(reader);
-        return institutions;
-    }
-
-    private List<Institution> CreateInstitutionFromReader(SqlDataReader reader)
+    public List<Institution> CreateInstitutionFromReader(SqlDataReader reader)
     {
         var institutions = new List<Institution>();
 

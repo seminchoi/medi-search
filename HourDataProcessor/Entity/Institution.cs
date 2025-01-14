@@ -73,11 +73,6 @@ public class Institution
                                                        && InstitutionType != other.InstitutionType)
             return false;
 
-        // Code가 존재하고 같으면 true
-        if (!string.IsNullOrEmpty(Code) && !string.IsNullOrEmpty(other.Code)
-                                        && Code == other.Code)
-            return true;
-
         // PhoneNumber가 존재하고 같으면 true
         if (!string.IsNullOrEmpty(PhoneNumber) && !string.IsNullOrEmpty(other.PhoneNumber)
                                                && PhoneNumber == other.PhoneNumber)
@@ -96,8 +91,8 @@ public class Institution
                                            && Address == other.Address)
             return true;
         
-        // 위의 조건들로 판단이 안되면 문자열 유사도 검사
-        var similarity = CustomStringUtils.CalculateSimilarity(Name, other.Name);
+        // 위의 조건으로 판단이 안되면 문자열 유사도 검사
+        var similarity = CustomStringUtils.CalculateSimilarity(Address, other.Address);
         LogHelper.LogInformation($"{Address}와 {other.Address}의 유사도는 {similarity} 입니다.");
         return similarity >= 0.90;
     }
