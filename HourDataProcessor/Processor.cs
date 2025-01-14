@@ -9,16 +9,19 @@ namespace HourDataProcessor;
 
 public class Processor
 {
-    private readonly InstitutionDao _institutionDao = new();
-    private readonly EntityReaderFromCsv _entityReader = new();
+    private readonly InstitutionDao _institutionDao;
+    private readonly IEntityReader _entityReader;
 
     public Processor()
     {
+        _institutionDao = new InstitutionDao();
+        _entityReader = new EntityReaderFromCsv();
     }
 
-    public Processor(InstitutionDao institutionDao)
+    public Processor(IEntityReader entityReader)
     {
-        _institutionDao = institutionDao;
+        _institutionDao = new InstitutionDao();
+        _entityReader = entityReader;
     }
 
     public void Run()
@@ -72,7 +75,7 @@ public class Processor
         Institution? originInstitution = null;
         try
         {
-            originInstitution = FilterDissimilarInstitutions(institution, originInstitutions);
+            originInstitution = FindInstitutionsByUniqueKey(institution, originInstitutions);
             if (originInstitution == null)
             {
                 originInstitution = FilterDissimilarInstitutions(institution, originInstitutions);
@@ -95,11 +98,6 @@ public class Processor
             institution.InstitutionType = originInstitution.InstitutionType;
 
         if (originInstitution.DirtyCheck(institution)) return;
-
-        if (institution.Code != null && institution.Code != originInstitution.Code)
-        {
-            LoggerHelper.LogWarning($"{originInstitution.Id} 에서 기관명과 위치가 일치하지만 요양코드가 다른 케이스 발생");
-        }
 
         // 병원/약국 자체 정보에 업데이트 내역이 있으면 업데이트 한다.
         if (!institution.DirtyCheck(originInstitution))
