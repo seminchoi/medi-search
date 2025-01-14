@@ -1,0 +1,22 @@
+services:
+  logserver:
+    image: choicco89/logserver:latest
+    ports:
+      - "80:80"
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=sqlserverlogapp;Database=LogApp;User Id=sa;Password=rootRoot123;TrustServerCertificate=True
+      - ASPNETCORE_ENVIRONMENT=Development
+      - TZ=Asia/Seoul
+    depends_on:
+      - sqlserverlogapp
+    networks:
+      - lognet
+
+  sqlserverlogapp:
+    image: choicco89/sqlserver-for-log
+    networks:
+      - lognet
+
+networks:
+  lognet:
+    driver: bridge
