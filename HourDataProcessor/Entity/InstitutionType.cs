@@ -20,6 +20,16 @@ public enum InstitutionType
 
 public static class InstitutionTypeHelper
 {
+    public static InstitutionType TryParse(string? institutionTypeString)
+    {
+        if (Enum.TryParse<InstitutionType>(institutionTypeString, out var parsedResult))
+        {
+            return parsedResult;
+        }
+
+        return InstitutionType.Unknown;
+    }
+    
     public static InstitutionType ValueOf(string? institutionName)
     {
         if (string.IsNullOrWhiteSpace(institutionName))
