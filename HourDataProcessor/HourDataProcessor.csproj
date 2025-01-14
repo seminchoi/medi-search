@@ -43,10 +43,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="logs\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Remove="resources\csvs\hospital2.csv" />
       <Content Include="resources\csvs\hospital2.csv">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>

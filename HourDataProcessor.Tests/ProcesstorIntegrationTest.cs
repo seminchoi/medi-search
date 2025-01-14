@@ -7,6 +7,13 @@ using Moq;
 
 namespace HourDataProcessor.Tests;
 
+/// <summary>
+/// 비즈니스 로직 통합 테스트
+/// </summary>
+/// <remarks>
+/// 병렬 수행할 시 공유 자원(DB)에 접근하기때문에 문제가 될 수 있다.
+/// 만약 병렬수행이 필요하다면 트랜잭션 전파를 구현해야 한다.
+/// </remarks>
 [TestFixture]
 public class ProcessorIntegrationTests : IDisposable
 {
@@ -25,7 +32,6 @@ public class ProcessorIntegrationTests : IDisposable
     {
         _institutionDao = new InstitutionDao();
         _mockEntityReader = new Mock<IEntityReader>();
-        // 트랜잭션 설정
         _connection = new SqlConnection(ConfigHolder.AppConfig.Database.ConnectionString);
         _connection.Open();
     }

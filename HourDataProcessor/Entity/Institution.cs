@@ -82,7 +82,7 @@ public class Institution
     }
     
     /// <summary>
-    /// Uniquekey가 동일한지 확인합니다.
+    /// 주소 문자열이 같은지, 다르다면 문자열 유사도가 0.9가 넘는지 확인한다.
     /// </summary>
     public bool IsAddressSimilarTo(Institution other)
     {

@@ -26,20 +26,11 @@ public static class DbInitializer
         }
        
         var sqlContent = File.ReadAllText(sqlPath);
-        
-        try
-        {
-            using var connection = new SqlConnection(connectionString);
-            connection.Open();
 
-            using var command = new SqlCommand(sqlContent, connection);
-            command.ExecuteNonQuery();
-            Console.WriteLine("DDL executed successfully.");
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        using var connection = new SqlConnection(connectionString);
+        connection.Open();
+
+        using var command = new SqlCommand(sqlContent, connection);
+        command.ExecuteNonQuery();
     }
 }
