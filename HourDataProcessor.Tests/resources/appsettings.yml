@@ -1,7 +1,7 @@
 database:
   devMode: false
   masterConnectionString: "Server=localhost;Database=master;User Id=sa;Password=rootRoot123;TrustServerCertificate=True"
-  connectionString: "Server=localhost;Database=TestLogApp;User Id=sa;Password=rootRoot123;;TrustServerCertificate=True"
+  connectionString: "Server=localhost;Database=TestLogAppSem;User Id=sa;Password=rootRoot123;;TrustServerCertificate=True"
   
 csvSource:
   basePath: "resources"
