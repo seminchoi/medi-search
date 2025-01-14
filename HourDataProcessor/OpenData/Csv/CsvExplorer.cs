@@ -1,3 +1,4 @@
+using HourDataProcessor.Entity;
 using Microsoft.IdentityModel.Tokens;
 
 namespace HourDataProcessor.OpenData.Csv;
@@ -5,7 +6,7 @@ namespace HourDataProcessor.OpenData.Csv;
 public class CsvExplorer
 {
     private const string FilePostfix = ".csv";
-    private Queue<string> FilePaths { get; } = new(); 
+    private Queue<(InstitutionType, string)> FilePaths { get; } = new();
 
     /// <summary>
     /// CsvSource 설정 값으로부터 CsvFilePath를 불러옵니다.
@@ -18,22 +19,32 @@ public class CsvExplorer
     {
         var csvSource = ConfigHolder.AppConfig.CsvSource;
         var csvSourceBasePath = csvSource.BasePath;
-     
+
         var rootPath = AppContext.BaseDirectory;
-        
-        var basePath = csvSourceBasePath != null ? Path.Combine(rootPath, csvSourceBasePath) : rootPath;
-        
+
+        var basePath = Path.Combine(rootPath, csvSourceBasePath);
+
         foreach (var fileName in csvSource.FileNames)
         {
-            var filePath = Path.Combine(basePath, fileName + FilePostfix);
+            var type = InstitutionType.Unknown;
+            var originFileName = fileName;
+            
+            if (fileName.StartsWith("DS/"))
+            {
+                type = InstitutionType.DrugStore;
+                originFileName = fileName.Substring(3);
+            }
+
+            var filePath = Path.Combine(basePath, originFileName + FilePostfix);
             if (File.Exists(filePath))
             {
-                FilePaths.Enqueue(filePath);
+                FilePaths.Enqueue((type, filePath));
             }
             else throw new FileNotFoundException("CsvSource File not found", filePath);
         }
     }
-    public string GetCsvFilePath()
+
+    public (InstitutionType type, string filePath) GetCsvFilePath()
     {
         return FilePaths.Dequeue();
     }

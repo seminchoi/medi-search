@@ -231,6 +231,49 @@ public class ProcessorIntegrationTests : IDisposable
             {
                 Code = "Cod2",
                 Name = "비움채한의원",
+                Address = "서울특별시 강남구 선릉로107길 25",
+                PhoneNumber = "02-554-8495",
+                InstitutionType = InstitutionType.Hospital,
+                Longitude = 127.0428335,
+                Latitude = 37.50881007,
+                BusinessHours = CreateBusinessHours("1000", "1930")
+            }
+        };
+        
+        RunProcessorWithMocking(institutions);
+
+        // Assert
+        using var command = new SqlCommand(
+            "SELECT COUNT(*) FROM Institution",
+            _connection);
+        var count = (int)command.ExecuteScalar();
+
+        Assert.That(count, Is.EqualTo(1));
+    }
+    
+    [Test(Description = "SeoulCode가 같으면 같은 데이터로 판단한다.")]
+    public void TestSameSeoulCode()
+    {
+        // Arrange
+        var institutions = new List<Institution>
+        {
+            new()
+            {
+                Code = null,
+                SeoulCode = "seoulCode",
+                Name = "비움채한의원",
+                Address = "서울특별시 강남구 선릉로107길 15, 3층 202호 (역삼동)",
+                PhoneNumber = "02-554-8495",
+                InstitutionType = InstitutionType.Hospital,
+                Longitude = 127.0428335,
+                Latitude = 37.50881007,
+                BusinessHours = CreateBusinessHours("1000", "1930")
+            },
+            new()
+            {
+                Code = "Cod2",
+                SeoulCode = "seoulCode",
+                Name = "비움채한의원",
                 Address = "서울특별시 강남구 선릉로107길 15, 3층 202호 (역삼동)",
                 PhoneNumber = "02-554-8495",
                 InstitutionType = InstitutionType.Hospital,
@@ -287,7 +330,7 @@ public class ProcessorIntegrationTests : IDisposable
     private List<Institution> ReadInstitutionsFromDb()
     {
         using var command = new SqlCommand(
-            @"SELECT i.Id, i.Code, i.Name, i.Address, i.PhoneNumber, i.InstitutionType,
+            @"SELECT i.Id, i.Code, i.SeoulCode, i.Name, i.Address, i.PhoneNumber, i.InstitutionType,
                  i.Location.STAsText() as LocationText,
                  h.Id as HourId,
                  h.MonStart, h.MonEnd,

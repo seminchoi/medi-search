@@ -10,7 +10,8 @@ public sealed class InstitutionMapper : ClassMap<Institution>
 {
     public InstitutionMapper()
     {
-        Map(m => m.Code).Name("암호화요양기호");
+        Map(m => m.SeoulCode).Name("서울ID").Default(null);
+        Map(m => m.Code).Name("암호화요양기호").Default(null);
         Map(m => m.Address).Name("주소");
         Map(m => m.Name).Name("요양기관명");
         Map(m => m.PhoneNumber).Name("전화번호").Default(null);

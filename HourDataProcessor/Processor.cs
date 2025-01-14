@@ -129,7 +129,7 @@ public class Processor
 
         if (uniqueKeyEquals.Count == 1)
         {
-            return institutions.Single();
+            return uniqueKeyEquals.Single();
         }
 
         if (uniqueKeyEquals.Count > 1)

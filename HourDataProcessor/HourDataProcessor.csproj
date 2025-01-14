@@ -24,6 +24,10 @@
       <Content Include="resources\init-table.sql">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <None Remove="resources\csvs\drugstore2.csv" />
+      <Content Include="resources\csvs\drugstore2.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>

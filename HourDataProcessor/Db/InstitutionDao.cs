@@ -47,6 +47,7 @@ public class InstitutionDao
         var selectQuery = $@"
         SELECT 
             Institution.Id AS Id,
+            SeoulCode,
             Code,
             Name, 
             Address, 
@@ -61,7 +62,8 @@ public class InstitutionDao
         LEFT JOIN InstitutionHour
             ON Institution.Id = InstitutionHour.InstitutionId
         WHERE 
-            (@Code IS NOT NULL AND Code = @Code)
+            (@Code IS NOT NULL AND Code = @Code) 
+            OR (@SeoulCode IS NOT NULL AND SeoulCode = @SeoulCode)
             {additionalConditionQuery}
         ;";
 
@@ -72,8 +74,10 @@ public class InstitutionDao
     private void AddParameters(SqlCommand command, Institution institution)
     {
         command.Parameters.AddWithValue("@InstitutionType", institution.InstitutionType.ToString());
-        var sqlParameter = command.Parameters.Add("@Code", SqlDbType.VarChar, 100);
-        sqlParameter.Value = institution.Code ?? (object)DBNull.Value;
+        var codeParameter = command.Parameters.Add("@Code", SqlDbType.VarChar, 100);
+        codeParameter.Value = institution.Code ?? (object)DBNull.Value;
+        var seoulCodeParameter = command.Parameters.Add("@SeoulCode", SqlDbType.VarChar, 20);
+        seoulCodeParameter.Value = institution.SeoulCode ?? (object)DBNull.Value;
         command.Parameters.AddWithValue("@Name", institution.Name);
         command.Parameters.AddWithValue("@Latitude", institution.Latitude ?? (object)DBNull.Value);
         command.Parameters.AddWithValue("@Longitude", institution.Longitude ?? (object)DBNull.Value);
@@ -87,10 +91,12 @@ public class InstitutionDao
 
         while (reader.Read())
         {
+            
             var point = ParseLocation(reader["LocationText"] as string);
             var institution = new Institution
             {
                 Id = reader.GetInt32(0),
+                SeoulCode = reader["SeoulCode"] as string,
                 Code = reader["Code"] as string,
                 Name = reader["Name"] as string,
                 Address = reader["Address"] as string,
@@ -151,9 +157,9 @@ public class InstitutionDao
     public void Save(Institution institution)
     {
         var query = @"
-            INSERT INTO Institution (Code, Name, Address, PhoneNumber, InstitutionType, Location)
+            INSERT INTO Institution (Code, SeoulCode, Name, Address, PhoneNumber, InstitutionType, Location)
             OUTPUT INSERTED.Id
-            VALUES (@Code, @Name, @Address, @PhoneNumber, @InstitutionType,
+            VALUES (@Code, @SeoulCode, @Name, @Address, @PhoneNumber, @InstitutionType,
             CASE 
                 WHEN @Latitude IS NULL OR @Longitude IS NULL THEN NULL
                 ELSE geography::Point(@Latitude, @Longitude, 4326)
@@ -162,6 +168,7 @@ public class InstitutionDao
 
         using var command = CreateCommand(query);
         command.Parameters.AddWithValue("@Code", institution.Code ?? (object)DBNull.Value);
+        command.Parameters.AddWithValue("@SeoulCode", institution.SeoulCode ?? (object)DBNull.Value);
         command.Parameters.AddWithValue("@Name", institution.Name);
         command.Parameters.AddWithValue("@Address", institution.Address ?? (object)DBNull.Value);
         command.Parameters.AddWithValue("@PhoneNumber", institution.PhoneNumber ?? (object)DBNull.Value);
@@ -208,13 +215,17 @@ public class InstitutionDao
     {
         var query = @"
             UPDATE Institution
-            SET 
+            SET
+                Code = @Code,
+                SeoulCode = @SeoulCode,
                 Address = @Address,
                 PhoneNumber = @PhoneNumber
             WHERE Id = @Id;";
 
         using var command = CreateCommand(query);
         command.Parameters.AddWithValue("@Id", institution.Id);
+        command.Parameters.AddWithValue("@Code", institution.Code ?? (object)DBNull.Value);
+        command.Parameters.AddWithValue("@SeoulCode", institution.SeoulCode ?? (object)DBNull.Value);
         command.Parameters.AddWithValue("@PhoneNumber", institution.PhoneNumber ?? (object)DBNull.Value);
         command.Parameters.AddWithValue("@Address", institution.Address ?? (object)DBNull.Value);
 

@@ -6,6 +6,7 @@ namespace HourDataProcessor.Entity;
 public class Institution
 {
     public int? Id { get; set; }
+    public string? SeoulCode { get; set; }
 
     public string Name { get; set; } = string.Empty;
 
@@ -31,6 +32,8 @@ public class Institution
     public void CombineWithOriginal(Institution original)
     {
         Id ??= original.Id;
+        Code ??= original.Code;
+        SeoulCode ??= original.SeoulCode;
         Address ??= original.Address;
         PhoneNumber ??= original.PhoneNumber;
         BusinessHours ??= original.BusinessHours;
@@ -53,10 +56,13 @@ public class Institution
     /// 비교 대상 중 하나라도 null이면 false를 반환합니다.
     public bool EqualUniqueCode(Institution other)
     {
-        if (string.IsNullOrEmpty(Code) || string.IsNullOrEmpty(other.Code))
-            return false;
-
-        return Code == other.Code;
+        bool isCodeEqual = (!string.IsNullOrEmpty(Code) && !string.IsNullOrEmpty(other.Code)) && 
+                           (Code == other.Code);
+                      
+        bool isSeoulCodeEqual = (!string.IsNullOrEmpty(SeoulCode) && !string.IsNullOrEmpty(other.SeoulCode)) && 
+                                (SeoulCode == other.SeoulCode);
+    
+        return isCodeEqual || isSeoulCodeEqual;
     }
     
     /// <summary>
@@ -72,13 +78,7 @@ public class Institution
         if (InstitutionType != InstitutionType.Unknown && other.InstitutionType != InstitutionType.Unknown
                                                        && InstitutionType != other.InstitutionType)
             return false;
-
-        // PhoneNumber가 존재하고 같으면 true
-        if (!string.IsNullOrEmpty(PhoneNumber) && !string.IsNullOrEmpty(other.PhoneNumber)
-                                               && PhoneNumber == other.PhoneNumber)
-            return true;
-
-        return false;
+        return true;
     }
     
     /// <summary>
