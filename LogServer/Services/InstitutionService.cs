@@ -18,11 +18,27 @@ public class InstitutionService
         _serviceProvider = serviceProvider;
     }
 
-    public List<InstitutionDto> SearchOpenHospitalsInRange(
+    public InstitutionsDto SearchOpenInstitutionsInRange(
         double latitude,
         double longitude,
         double radiusInMeters,
         string institutionType
+    )
+    {
+        var currentTime = DateTime.Now;
+        var time = currentTime.ToString("HHmm");
+        
+        return SearchOpenInstitutionsInRange(
+            latitude, longitude, radiusInMeters, institutionType, time, currentTime.DayOfWeek);
+    }
+
+    public InstitutionsDto SearchOpenInstitutionsInRange(
+        double latitude,
+        double longitude,
+        double radiusInMeters,
+        string institutionType,
+        string time,
+        DayOfWeek dayOfWeek
     )
     {
         using var scope = _serviceProvider.CreateScope();
@@ -31,11 +47,17 @@ public class InstitutionService
         var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326);
         var currentLocation = geometryFactory.CreatePoint(new Coordinate(longitude, latitude));
 
-        var currentTime = DateTime.Now;
-        var currentHour = currentTime.ToString("HHmm");
+        var hourColumn = dayOfWeek.GetBusinessHourColumns();
 
-        var hourColumn = currentTime.DayOfWeek.GetBusinessHourColumns();
+        var institutions =
+            FindOpenInstitutions(radiusInMeters, institutionType, context, currentLocation, hourColumn, time);
+        return ConvertToDto(institutions, dayOfWeek);
+    }
 
+    private List<Institution> FindOpenInstitutions(double radiusInMeters, string institutionType,
+        ApplicationDbContext context,
+        Point currentLocation, (string startColumn, string endColumn) hourColumn, string currentHour)
+    {
         var institutions = context.Institutions
             .Include(institution => institution.InstitutionHour)
             .Where(institution =>
@@ -48,9 +70,14 @@ public class InstitutionService
                 EF.Property<string?>(institution.InstitutionHour, hourColumn.startColumn).CompareTo(currentHour) <= 0 &&
                 EF.Property<string?>(institution.InstitutionHour, hourColumn.endColumn).CompareTo(currentHour) >= 0)
             .ToList();
-        var institutionDtos = institutions.Select(h => 
+        return institutions;
+    }
+
+    private InstitutionsDto ConvertToDto(List<Institution> institutions, DayOfWeek dayOfWeek)
+    {
+        var institutionDtos = institutions.Select(h =>
         {
-            var (todayOpen, todayClose) = GetTodayBusinessHours(h.InstitutionHour, currentTime.DayOfWeek);
+            var (todayOpen, todayClose) = GetTodayBusinessHours(h.InstitutionHour, dayOfWeek);
             return new InstitutionDto
             {
                 Id = h.Id,
@@ -64,10 +91,9 @@ public class InstitutionService
             };
         }).ToList();
 
-        return institutionDtos;
+        return new InstitutionsDto() { Institutions = institutionDtos };
     }
-    
-    
+
     private (string? start, string? end) GetTodayBusinessHours(InstitutionHour hours, DayOfWeek day)
     {
         return day switch
