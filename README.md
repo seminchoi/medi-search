@@ -133,10 +133,6 @@ WHERE:(CONVERT_IMPLICIT(nvarchar(100),[LogApp].[dbo].[Institution].[Code],0)=[@C
 //기존 문제의 코드
 command.Parameters.AddWithValue("@InstitutionType", institution.InstitutionType.ToString());
 
-## 보완할 점
-- 점심시간, 공휴일 데이터 수집 및 API 반영
-- 데이터 수집 프로그램 실행시 매번 빌드하지 않도록 외부 경로에서 csv 파일을 읽을 수 있도록 수정
-
 //개선 코드
 var sqlParameter = command.Parameters.Add("@Code", SqlDbType.VarChar, 100);
 sqlParameter.Value = institution.Code ?? (object)DBNull.Value;
